@@ -1,0 +1,29 @@
+name: Sample CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+      
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+
+    - name: Restore
+      run: dotnet restore
+      working-directory: ./sample
+      
+    - name: Build with dotnet
+      run: dotnet build --configuration Release
+      working-directory: ./sample
+
+    - name: Dotnet Publish
+      run: dotnet publish --configuration Release -o netcore 
+      working-directory: ./sample
