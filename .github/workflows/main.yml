@@ -8,7 +8,11 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        node_version: ['8', '10', '12']
+        os: [ubuntu-latest, windows-latest, macOS-latest]
 
     steps:
     - uses: actions/checkout@v1
@@ -28,9 +32,3 @@ jobs:
       run: dotnet publish --configuration Release -o netcore 
       working-directory: ./sample
 
-    - name: 'Run Azure webapp deploy action using publish profile credentials'
-      uses: azure/webapps-deploy@v2
-      with: 
-        app-name: githubday
-        publish-profile: ${{ secrets.azureWebAppPublishProfile }}
-        package: /home/runner/work/sample-live/sample-live/sample/netcore/
